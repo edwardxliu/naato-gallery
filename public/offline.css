@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "ivypresto-display";
+  src: url("/_next/static/media/IvyPrestoHeadline_Thin-s.p.830ff306.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 100 900;
+}
+
+html, body {
+  overscroll-behavior: none;
+}
+
+h1[aria-label="The NAATO Visual Stories Reimagined"] > span > span:nth-child(2) > span:first-child > span {
+  visibility: visible !important;
+  font-family: "ivypresto-display", serif;
+  font-size: var(--text-headline-10);
+  letter-spacing: 0.07em;
+}
+
+h1[aria-label="The NAATO Visual Stories Reimagined"] > span > span:nth-child(2) > span:first-child svg {
+  display: none !important;
+}
+
+h1[aria-label="The NAATO Visual Stories Reimagined"] > span > span:nth-child(2) > span:first-child > span::after {
+  content: "VISUAL";
+}

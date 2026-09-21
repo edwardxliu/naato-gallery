@@ -61,6 +61,21 @@
     });
   };
 
+  const elleGalleryImages = ["/images/elle-replacements/gallery-01.jpg","/images/elle-replacements/gallery-02.jpg","/images/elle-replacements/gallery-03.jpg","/images/elle-replacements/gallery-04.jpg","/images/elle-replacements/gallery-05.jpg","/images/elle-replacements/gallery-06.png","/images/elle-replacements/gallery-07.jpg","/images/elle-replacements/gallery-08.png","/images/elle-replacements/gallery-09.jpg","/images/elle-replacements/gallery-10.png","/images/elle-replacements/gallery-11.jpg","/images/elle-replacements/gallery-12.jpg","/images/elle-replacements/gallery-13.jpg","/images/elle-replacements/gallery-14.png","/images/elle-replacements/gallery-15.jpg","/images/elle-replacements/gallery-16.png","/images/elle-replacements/gallery-17.jpg","/images/elle-replacements/gallery-18.jpg","/images/elle-replacements/gallery-19.png","/images/elle-replacements/gallery-20.png","/images/elle-replacements/gallery-21.png","/images/elle-replacements/gallery-22.png","/images/elle-replacements/gallery-23.jpg","/images/elle-replacements/gallery-24.png","/images/elle-replacements/gallery-25.jpg","/images/elle-replacements/gallery-26.jpg","/images/elle-replacements/gallery-27.png","/images/elle-replacements/gallery-28.jpg","/images/elle-replacements/gallery-29.jpg","/images/elle-replacements/gallery-30.png","/images/elle-replacements/gallery-31.png","/images/elle-replacements/gallery-32.jpg","/images/elle-replacements/gallery-33.png","/images/elle-replacements/gallery-34.png","/images/elle-replacements/gallery-35.png","/images/elle-replacements/gallery-36.jpg","/images/elle-replacements/gallery-37.jpg","/images/elle-replacements/gallery-38.jpg","/images/elle-replacements/gallery-39.jpg","/images/elle-replacements/gallery-40.png","/images/elle-replacements/gallery-41.jpg","/images/elle-replacements/gallery-42.jpg","/images/elle-replacements/gallery-43.jpg","/images/elle-replacements/gallery-44.jpg","/images/elle-replacements/gallery-45.jpg","/images/elle-replacements/gallery-46.jpg","/images/elle-replacements/gallery-47.jpg"];
+
+  const updateElleGalleryImages = () => {
+    if (window.location.pathname !== "/elle") return;
+    document.querySelectorAll('a[href^="/elle/"]').forEach((link, index) => {
+      const image = link.querySelector("img");
+      const source = elleGalleryImages[index];
+      if (!image || !source || image.dataset.naatoSource === source) return;
+      image.removeAttribute("srcset");
+      image.removeAttribute("sizes");
+      image.src = source;
+      image.dataset.naatoSource = source;
+    });
+  };
+
   const updateIntroCta = () => {
     if (window.location.pathname !== "/elle-intro") return;
     document.querySelectorAll("a").forEach((link) => {
@@ -77,6 +92,30 @@
         label.textContent = "Scroll to explore";
       }
     });
+  };
+
+  const updateElleHeaderMark = () => {
+    if (window.location.pathname !== "/elle") return;
+    const mark = document.querySelector('header button[aria-label="Open menu"] svg[viewBox="0 0 38 14"]');
+    if (!mark || mark.dataset.naatoHeaderAnchor) return;
+
+    mark.dataset.naatoHeaderAnchor = "true";
+    const container = mark.parentElement;
+    if (!container) return;
+
+    const logo = document.createElement("img");
+    logo.alt = "NAATO";
+    logo.decoding = "async";
+    logo.draggable = false;
+    logo.dataset.naatoHeaderImage = "true";
+    Object.assign(container.style, { position: "relative", width: "90px", height: "21px" });
+    Object.assign(logo.style, {
+      position: "absolute", inset: "0", width: "100%", height: "100%",
+      objectFit: "contain", pointerEvents: "none",
+    });
+    logo.addEventListener("load", () => { mark.style.visibility = "hidden"; }, { once: true });
+    logo.src = "/images/naato-header-logo.jpg";
+    container.append(logo);
   };
 
   const updateElleArchiveMark = () => {
@@ -145,8 +184,10 @@
   const updatePageOverrides = () => {
     updateStoryLabels();
     updateCoverImages();
+    updateElleGalleryImages();
     updateIntroCta();
     updateArchivePrompt();
+    updateElleHeaderMark();
     updateElleArchiveMark();
   };
 

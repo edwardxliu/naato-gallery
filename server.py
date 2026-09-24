@@ -6,7 +6,28 @@ ROOT = Path(__file__).parent
 MIRROR = ROOT / "mirror"
 PUBLIC = ROOT / "public"
 
+PUBLIC_ROUTES = {
+    "/life": "/elle",
+    "/life-intro": "/elle-intro",
+    "/objects": "/esquire",
+    "/objects-intro": "/esquire-intro",
+}
+LEGACY_ROUTES = {legacy: public for public, legacy in PUBLIC_ROUTES.items()}
+
 class Handler(SimpleHTTPRequestHandler):
+    def do_GET(self):
+        parsed = urlsplit(self.path)
+        for legacy, public in LEGACY_ROUTES.items():
+            if parsed.path == legacy or parsed.path.startswith(f"{legacy}/"):
+                destination = public + parsed.path[len(legacy):]
+                if parsed.query:
+                    destination += f"?{parsed.query}"
+                self.send_response(308)
+                self.send_header("Location", destination)
+                self.end_headers()
+                return
+        super().do_GET()
+
     def end_headers(self):
         self.send_header("Cache-Control", "no-store, max-age=0")
         self.send_header("Pragma", "no-cache")
@@ -25,6 +46,11 @@ class Handler(SimpleHTTPRequestHandler):
                 return str(candidate)
 
         relative = path.lstrip("/")
+        for public, legacy in PUBLIC_ROUTES.items():
+            public_relative = public.lstrip("/")
+            if relative == public_relative or relative.startswith(f"{public_relative}/"):
+                relative = legacy.lstrip("/") + relative[len(public_relative):]
+                break
         static = (PUBLIC / relative).resolve()
         if static.is_relative_to(PUBLIC.resolve()) and static.is_file():
             return str(static)

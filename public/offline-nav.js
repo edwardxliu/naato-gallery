@@ -1,5 +1,6 @@
 (() => {
   const currentPath = window.location.pathname
+    .replace(/\/+$/, "")
     .replace(/^\/life(?=\/|$)/, "/elle")
     .replace(/^\/objects(?=\/|$)/, "/esquire");
   const nativeFetch = window.fetch.bind(window);

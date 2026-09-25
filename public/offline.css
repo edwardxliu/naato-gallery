@@ -9,6 +9,11 @@ html, body {
   overscroll-behavior: none;
 }
 
+/* Remove the legacy Esquire wordmark from the Index menu header. */
+button[aria-label="Close menu"] svg[viewBox="0 0 68 10"] {
+  display: none !important;
+}
+
 h1[aria-label="The NAATO Visual Stories Reimagined"] > span > span:nth-child(2) > span:first-child > span {
   visibility: visible !important;
   font-family: "ivypresto-display", serif;

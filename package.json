@@ -1,0 +1,9 @@
+{
+  "name": "naato-gallery",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test --test-isolation=none tests/deployment.test.cjs"
+  },
+  "engines": { "node": "24.x" }
+}
